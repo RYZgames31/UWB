@@ -1,8 +1,617 @@
 <!DOCTYPE html>
+<html lang="ru">
 <head>
-<meta charset="utf-8">
-<title>UWB</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ULTIMATE WHITELIST BYPASS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        h1 {
+            color: #58a6ff;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .version {
+            color: #8b949e;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .credits {
+            color: #8b949e;
+            font-size: 1rem;
+        }
+        
+        .panel {
+            background-color: #161b22;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #30363d;
+        }
+        
+        .panel-title {
+            color: #58a6ff;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .panel-title i {
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #c9d1d9;
+            font-weight: 500;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+        
+        .hint {
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin-top: 5px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        button {
+            padding: 14px 24px;
+            background-color: #238636;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        button:hover {
+            background-color: #2ea043;
+        }
+        
+        button.secondary {
+            background-color: #21262d;
+        }
+        
+        button.secondary:hover {
+            background-color: #30363d;
+        }
+        
+        button:disabled {
+            background-color: #30363d;
+            cursor: not-allowed;
+        }
+        
+        .status-panel {
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .status-message {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #c9d1d9;
+        }
+        
+        .status-details {
+            font-size: 1rem;
+            color: #8b949e;
+        }
+        
+        .status-progress {
+            height: 6px;
+            background-color: #0d1117;
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #238636;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .results-panel {
+            display: none;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .config-count {
+            background-color: #238636;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .configs-container {
+            background-color: #0d1117;
+            border-radius: 6px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #30363d;
+        }
+        
+        .config-item {
+            padding: 12px;
+            border-bottom: 1px solid #30363d;
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        
+        .config-item:last-child {
+            border-bottom: none;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .success {
+            color: #3fb950;
+        }
+        
+        .error {
+            color: #f85149;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #30363d;
+            border-top-color: #58a6ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .spinner {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #8b949e;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<h1>RYZz:UWB уже скоро...</h1>
+    <div class="container">
+        <header>
+            <h1>🛠 ULTIMATE WHITELIST BYPASS 👨‍💻</h1>
+            <div class="version">✓ Версия: V1</div>
+            <div class="credits">• By RYZz and t.me/catlergememe community</div>
+        </header>
+        
+        <main>
+            <div class="panel">
+                <div class="panel-title">
+                    <i class="fas fa-cogs"></i> Настройки поиска
+                </div>
+                
+                <div class="form-group">
+                    <label for="outputPath">Путь для сохранения конфигов</label>
+                    <input type="text" id="outputPath" placeholder="Оставьте пустым для сохранения в текущей папке">
+                    <div class="hint">Файл будет сохранён как "UWB_script_configs.txt" в указанной папке</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="keyword">Ключевое слово для фильтрации</label>
+                    <input type="text" id="keyword" placeholder="Оставьте пустым для получения всех конфигов">
+                    <div class="hint">Будут выбраны только конфиги, содержащие это ключевое слово</div>
+                </div>
+                
+                <div class="buttons">
+                    <button id="startBtn">
+                        <i class="fas fa-play"></i> Начать поиск конфигов
+                    </button>
+                    <button id="resetBtn" class="secondary">
+                        <i class="fas fa-redo"></i> Сбросить
+                    </button>
+                </div>
+            </div>
+            
+            <div class="panel status-panel">
+                <div class="panel-title">
+                    <i class="fas fa-info-circle"></i> Статус выполнения
+                </div>
+                
+                <div class="status-message" id="statusMessage">Готов к поиску конфигов...</div>
+                <div class="status-details" id="statusDetails">Нажмите кнопку "Начать поиск конфигов" для запуска</div>
+                
+                <div class="status-progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+            
+            <div class="panel results-panel" id="resultsPanel">
+                <div class="results-header">
+                    <div class="panel-title">
+                        <i class="fas fa-list"></i> Найденные конфиги
+                    </div>
+                    <div class="config-count" id="configCount">0 конфигов</div>
+                </div>
+                
+                <div class="configs-container" id="configsContainer">
+                    <!-- Конфиги будут отображаться здесь -->
+                </div>
+                
+                <div class="actions">
+                    <button id="downloadBtn" class="secondary">
+                        <i class="fas fa-download"></i> Скачать конфиги
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>⚠️ Используйте конфиги только в законных целях. Авторы не несут ответственности за ваши действия.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Список источников конфигов
+        const subscriptions = [
+            "https://raw.githubusercontent.com/AvenCores/goida-vpn-configs/refs/heads/main/githubmirror/26.txt",
+            "https://raw.githubusercontent.com/roosterkid/openproxylist/main/V2RAY_RAW.txt",
+            "https://jsnegsukavsos.hb.ru-msk.vkcloud-storage.ru/love",
+            "https://raw.githubusercontent.com/zieng2/wl/main/vless.txt",
+            "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/Vless-Reality-White-Lists-Rus-Mobile.txt",
+            "https://raw.githubusercontent.com/LowiKLive/BypassWhitelistRu/refs/heads/main/WhiteList-Bypass_Ru.txt",
+            "https://raw.githubusercontent.com/zieng2/wl/main/vless_universal.txt"
+        ];
+
+        // Элементы DOM
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const outputPathInput = document.getElementById('outputPath');
+        const keywordInput = document.getElementById('keyword');
+        const statusMessage = document.getElementById('statusMessage');
+        const statusDetails = document.getElementById('statusDetails');
+        const progressBar = document.getElementById('progressBar');
+        const resultsPanel = document.getElementById('resultsPanel');
+        const configsContainer = document.getElementById('configsContainer');
+        const configCount = document.getElementById('configCount');
+
+        // Переменные состояния
+        let foundConfigs = [];
+        let totalConfigs = 0;
+        let configsWithoutDuplicates = 0;
+        let isProcessing = false;
+
+        // Функция для обновления статуса
+        function updateStatus(message, details = '', progress = 0) {
+            statusMessage.textContent = message;
+            statusDetails.textContent = details;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Функция для проверки конфига на соответствие критериям
+        function isValidConfig(config, keyword) {
+            // Проверка наличия ключевых слов в конфиге
+            const hasRussianSites = config.includes('vk.com') || 
+                                   config.includes('userapi.com') || 
+                                   config.includes('mail.ru') || 
+                                   config.includes('yandex.net') || 
+                                   config.includes('yastatic.net') || 
+                                   config.includes('yandex.ru') || 
+                                   config.includes('ok.ru') || 
+                                   config.includes('ozone.ru') || 
+                                   config.includes('rutube.ru');
+            
+            const hasRussianIndicators = config.includes('%F0%9F%87%B7%F0%9F%87%BA') || 
+                                        config.includes('🇷🇺') || 
+                                        config.includes('RU') || 
+                                        config.includes('Russia') || 
+                                        config.includes('Россия') || 
+                                        config.includes('Russian');
+            
+            const hasExcludedTerms = config.includes('Москва') || 
+                                    config.includes('#%5BSNI%3A') || 
+                                    config.includes('confegraigan') || 
+                                    config.includes('Global Connectivity Solutions Llp') || 
+                                    config.includes('Yandex.Cloud LLC') || 
+                                    config.includes('Hypercore Ltd') || 
+                                    config.includes('Cloud Network LLC');
+            
+            const hasKeyword = keyword === '' || config.includes(keyword);
+            
+            return hasRussianSites && hasRussianIndicators && !hasExcludedTerms && hasKeyword;
+        }
+
+        // Функция для получения конфигов с одного источника
+        async function fetchConfigsFromSource(url, keyword) {
+            try {
+                const response = await fetch(url, { 
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const text = await response.text();
+                const lines = text.split('\n');
+                
+                let sourceConfigs = [];
+                for (const line of lines) {
+                    if (isValidConfig(line, keyword)) {
+                        sourceConfigs.push(line.trim());
+                    }
+                }
+                
+                return sourceConfigs;
+            } catch (error) {
+                console.error(`Ошибка при получении данных из ${url}:`, error);
+                return [];
+            }
+        }
+
+        // Удаление дубликатов
+        function removeDuplicates(configs) {
+            const seen = new Set();
+            const result = [];
+            
+            for (const config of configs) {
+                if (config && !seen.has(config)) {
+                    seen.add(config);
+                    result.push(config);
+                }
+            }
+            
+            return result;
+        }
+
+        // Основная функция поиска конфигов
+        async function searchConfigs() {
+            if (isProcessing) return;
+            
+            isProcessing = true;
+            startBtn.disabled = true;
+            startBtn.innerHTML = '<div class="loading spinner"></div> Идет поиск...';
+            
+            const keyword = keywordInput.value.trim();
+            foundConfigs = [];
+            totalConfigs = 0;
+            configsWithoutDuplicates = 0;
+            
+            updateStatus('⏳ Пожалуйста, подождите...', 'Идёт поиск конфигов. Это может занять несколько секунд...', 0);
+            
+            // Очистка результатов
+            configsContainer.innerHTML = '';
+            resultsPanel.style.display = 'none';
+            
+            // Получение конфигов из всех источников
+            for (let i = 0; i < subscriptions.length; i++) {
+                const url = subscriptions[i];
+                const progress = Math.round((i / subscriptions.length) * 100);
+                
+                updateStatus(
+                    '⏳ Пожалуйста, подождите...', 
+                    `Проверка источника ${i+1} из ${subscriptions.length}: ${url}`, 
+                    progress
+                );
+                
+                const sourceConfigs = await fetchConfigsFromSource(url, keyword);
+                foundConfigs.push(...sourceConfigs);
+                totalConfigs = foundConfigs.length;
+                
+                updateStatus(
+                    '⏳ Пожалуйста, подождите...', 
+                    `${totalConfigs} конфигов найдено (проверено ${i+1} из ${subscriptions.length} источников)`, 
+                    progress
+                );
+                
+                // Небольшая задержка для имитации обработки
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            
+            // Удаление дубликатов
+            updateStatus('Обработка результатов', 'Удаление дубликатов...', 90);
+            
+            const uniqueConfigs = removeDuplicates(foundConfigs);
+            configsWithoutDuplicates = uniqueConfigs.length;
+            
+            // Отображение результатов
+            displayResults(uniqueConfigs);
+            
+            updateStatus(
+                '✅ Поиск завершен!', 
+                `Найдено ${configsWithoutDuplicates} уникальных конфигов (из ${totalConfigs} всего)`, 
+                100
+            );
+            
+            startBtn.disabled = false;
+            startBtn.innerHTML = '<i class="fas fa-play"></i> Начать поиск конфигов';
+            isProcessing = false;
+        }
+
+        // Функция для отображения результатов
+        function displayResults(configs) {
+            configCount.textContent = `${configs.length} конфигов`;
+            configsContainer.innerHTML = '';
+            
+            if (configs.length === 0) {
+                configsContainer.innerHTML = '<div class="config-item">Конфиги не найдены. Попробуйте изменить ключевое слово.</div>';
+            } else {
+                configs.forEach((config, index) => {
+                    const configElement = document.createElement('div');
+                    configElement.className = 'config-item';
+                    configElement.textContent = `${index + 1}. ${config}`;
+                    configsContainer.appendChild(configElement);
+                });
+            }
+            
+            resultsPanel.style.display = 'block';
+        }
+
+        // Функция для скачивания конфигов
+        function downloadConfigs() {
+            if (foundConfigs.length === 0) {
+                alert('Нет конфигов для скачивания');
+                return;
+            }
+            
+            const uniqueConfigs = removeDuplicates(foundConfigs);
+            const keyword = keywordInput.value.trim();
+            const outputPath = outputPathInput.value.trim();
+            
+            let fileName = 'UWB_script_configs.txt';
+            if (outputPath) {
+                // В браузере мы не можем сохранять файлы по произвольному пути
+                // Поэтому просто используем имя файла из пути, если указано
+                const pathParts = outputPath.split('/');
+                if (pathParts.length > 0) {
+                    const lastPart = pathParts[pathParts.length - 1];
+                    if (lastPart.includes('.txt')) {
+                        fileName = lastPart;
+                    } else {
+                        fileName = `${lastPart}/UWB_script_configs.txt`;
+                    }
+                }
+            }
+            
+            const configText = uniqueConfigs.join('\n');
+            const blob = new Blob([configText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            updateStatus('✅ Конфиги скачаны!', `Файл "${fileName}" успешно сохранен`, 100);
+        }
+
+        // Функция сброса
+        function resetForm() {
+            if (isProcessing) return;
+            
+            outputPathInput.value = '';
+            keywordInput.value = '';
+            foundConfigs = [];
+            totalConfigs = 0;
+            configsWithoutDuplicates = 0;
+            
+            configsContainer.innerHTML = '';
+            resultsPanel.style.display = 'none';
+            
+            updateStatus('Готов к поиску конфигов...', 'Нажмите кнопку "Начать поиск конфигов" для запуска', 0);
+            
+            startBtn.disabled = false;
+            startBtn.innerHTML = '<i class="fas fa-play"></i> Начать поиск конфигов';
+        }
+
+        // Обработчики событий
+        startBtn.addEventListener('click', searchConfigs);
+        resetBtn.addEventListener('click', resetForm);
+        downloadBtn.addEventListener('click', downloadConfigs);
+
+        // Инициализация
+        updateStatus('Готов к поиску конфигов...', 'Нажмите кнопку "Начать поиск конфигов" для запуска', 0);
+    </script>
 </body>
+</html>
