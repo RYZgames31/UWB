@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" sizes="any">
     <title>ULTIMATE WHITELIST BYPASS</title>
     <style>
         * {
@@ -262,6 +262,13 @@
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
+            gap: 15px;
+        }
+        
+        .actions button {
+            flex: none;
+            width: auto;
+            min-width: 180px;
         }
         
         .success {
@@ -309,6 +316,14 @@
                 flex-direction: column;
             }
             
+            .actions {
+                flex-direction: column;
+            }
+            
+            .actions button {
+                width: 100%;
+            }
+            
             h1 {
                 font-size: 1.8rem;
             }
@@ -320,8 +335,8 @@
     <div class="container">
         <header>
             <h1>🛠 ULTIMATE WHITELIST BYPASS 👨‍💻</h1>
-            <div class="version">✓ Версия: V1.5</div>
-            <div class="sub_version">Добавлен AI-поиск конфигов</div>
+            <div class="version">✓ Версия: V1.5.1</div>
+            <div class="sub_version">Добавлен AI-поиск конфигов и копирование</div>
             <div class="credits">• By RYZz and t.me/catlergememe community</div>
         </header>
         
@@ -407,6 +422,9 @@
                 </div>
                 
                 <div class="actions">
+                    <button id="copyAllBtn" class="secondary">
+                        <i class="fas fa-copy"></i> Копировать все конфиги
+                    </button>
                     <button id="downloadBtn" class="secondary">
                         <i class="fas fa-download"></i> Скачать конфиги
                     </button>
@@ -450,6 +468,7 @@
         const startBtn = document.getElementById('startBtn');
         const resetBtn = document.getElementById('resetBtn');
         const downloadBtn = document.getElementById('downloadBtn');
+        const copyAllBtn = document.getElementById('copyAllBtn');
         const outputPathInput = document.getElementById('outputPath');
         const keywordInput = document.getElementById('keyword');
         const enableAISearchCheckbox = document.getElementById('enableAISearch');
@@ -502,7 +521,7 @@
             return allRawTexts.join('\n\n');
         }
 
-        // Функция для AI-поиска конфигов через LLM7 API (С ОБНОВЛЕННЫМ ПРОМПТОМ)
+        // Функция для AI-поиска конфигов через LLM7 API
         async function searchConfigsWithAI(keyword, rawConfigsText) {
             if (!keyword || keyword.trim() === '') {
                 throw new Error('Для AI-поиска необходимо указать ключевое слово');
@@ -566,8 +585,13 @@ ${rawConfigsText.substring(0, 45000)}...
                 
                 const data = await response.json();
                 
+                // ДОБАВЛЕН ALERT ДЛЯ ОТЛАДКИ
                 if (data.choices && data.choices[0] && data.choices[0].message) {
                     const aiResponse = data.choices[0].message.content;
+                    
+                    // ВЫВОДИМ ОТВЕТ AI В ALERT ДЛЯ ОТЛАДКИ
+                    console.log("AI Response:", aiResponse);
+                    alert(`[ОТЛАДКА] Ответ AI получен:\n\nПервые 1000 символов ответа:\n${aiResponse.substring(0, 1000)}${aiResponse.length > 1000 ? '...' : ''}\n\nПолный ответ в консоли (F12)`);
                     
                     // Извлекаем конфиги из ответа AI
                     const aiConfigs = extractConfigsFromAIResponse(aiResponse);
@@ -578,8 +602,6 @@ ${rawConfigsText.substring(0, 45000)}...
                     throw new Error('Неверный формат ответа от AI');
                 }
             } catch (error) {
-                alert(error)
-                alert(error.message)
                 console.error('Ошибка AI-поиска:', error);
                 throw new Error(`AI-поиск не удался: ${error.message}`);
             }
@@ -932,6 +954,68 @@ ${rawConfigsText.substring(0, 45000)}...
             return result;
         }
 
+        // Функция для копирования всех конфигов в буфер обмена
+        function copyAllConfigs() {
+            const configElements = document.querySelectorAll('.config-item[data-original]');
+            if (configElements.length === 0) {
+                alert('Нет конфигов для копирования');
+                return;
+            }
+            
+            const originalConfigs = [];
+            configElements.forEach(el => {
+                if (el.dataset.original) {
+                    originalConfigs.push(el.dataset.original);
+                }
+            });
+            
+            const configText = originalConfigs.join('\n');
+            
+            // Используем современный Clipboard API
+            navigator.clipboard.writeText(configText)
+                .then(() => {
+                    // Показываем временное уведомление об успехе
+                    const copyBtn = document.getElementById('copyAllBtn');
+                    const originalHtml = copyBtn.innerHTML;
+                    
+                    // Меняем иконку на галочку
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                    copyBtn.style.backgroundColor = '#238636';
+                    
+                    // Через 2 секунды возвращаем исходный вид
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalHtml;
+                        copyBtn.style.backgroundColor = '';
+                    }, 2000);
+                    
+                    updateStatus('✅ Конфиги скопированы!', `${originalConfigs.length} конфигов скопировано в буфер обмена`, 100);
+                })
+                .catch(err => {
+                    console.error('Ошибка копирования: ', err);
+                    
+                    // Fallback для старых браузеров
+                    const textArea = document.createElement('textarea');
+                    textArea.value = configText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    
+                    try {
+                        const successful = document.execCommand('copy');
+                        if (successful) {
+                            alert('Конфиги скопированы в буфер обмена!');
+                            updateStatus('✅ Конфиги скопированы!', `${originalConfigs.length} конфигов скопировано`, 100);
+                        } else {
+                            alert('Не удалось скопировать конфиги. Скопируйте текст вручную.');
+                        }
+                    } catch (fallbackErr) {
+                        console.error('Fallback ошибка: ', fallbackErr);
+                        alert('Не удалось скопировать конфиги. Попробуйте скачать файл.');
+                    }
+                    
+                    document.body.removeChild(textArea);
+                });
+        }
+
         // Основная функция поиска конфигов (теперь с поддержкой AI)
         async function searchConfigs() {
             if (isProcessing) return;
@@ -1253,6 +1337,7 @@ ${rawConfigsText.substring(0, 45000)}...
         startBtn.addEventListener('click', searchConfigs);
         resetBtn.addEventListener('click', resetForm);
         downloadBtn.addEventListener('click', downloadConfigs);
+        copyAllBtn.addEventListener('click', copyAllConfigs);
 
         // Автоматическое отключение AI-поиска при очистке ключевого слова
         keywordInput.addEventListener('input', function() {
