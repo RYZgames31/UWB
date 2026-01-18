@@ -107,6 +107,11 @@
             font-size: 1.2rem;
         }
         
+        .version_type {
+            color: #8b949e;
+            font-size: 1.2rem;
+        }
+        
         .sub_version {
             color: #8b949e;
             font-size: 1.1rem;
@@ -124,6 +129,11 @@
             padding: 25px;
             margin-bottom: 25px;
             border: 1px solid #30363d;
+            transition: all 0.3s ease;
+        }
+        
+        .panel.collapsible {
+            cursor: pointer;
         }
         
         .panel-title {
@@ -132,14 +142,43 @@
             margin-bottom: 15px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
         
         .panel-title i {
             margin-right: 10px;
         }
         
+        .panel-title .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+            color: #8b949e;
+        }
+        
+        .panel.collapsed .panel-title .toggle-icon {
+            transform: rotate(-90deg);
+        }
+        
+        .panel-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .panel.collapsed .panel-content {
+            max-height: 0;
+            opacity: 0;
+        }
+        
+        .panel:not(.collapsed) .panel-content {
+            max-height: 1000px;
+            opacity: 1;
+        }
+        
         .form-group {
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
         label {
@@ -147,28 +186,14 @@
             margin-bottom: 8px;
             color: #c9d1d9;
             font-weight: 500;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 12px 15px;
-            background-color: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            color: #c9d1d9;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #58a6ff;
+            cursor: pointer;
         }
         
         .hint {
             font-size: 0.9rem;
             color: #8b949e;
             margin-top: 5px;
+            margin-left: 60px;
         }
         
         .hint.beta {
@@ -207,10 +232,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-        }
-        
-        button:hover {
-            background-color: #2ea043;
         }
         
         button.secondary {
@@ -374,6 +395,121 @@
             border-top: 1px solid #30363d;
         }
         
+        /* From Uiverse.io by Galahhad */ 
+        .switch {
+            /* switch */
+            --switch-width: 46px;
+            --switch-height: 24px;
+            --switch-bg: rgb(131, 131, 131);
+            --switch-checked-bg: rgb(0, 218, 80);
+            --switch-offset: calc((var(--switch-height) - var(--circle-diameter)) / 2);
+            --switch-transition: all .2s cubic-bezier(0.27, 0.2, 0.25, 1.51);
+            /* circle */
+            --circle-diameter: 18px;
+            --circle-bg: #fff;
+            --circle-shadow: 1px 1px 2px rgba(146, 146, 146, 0.45);
+            --circle-checked-shadow: -1px 1px 2px rgba(163, 163, 163, 0.45);
+            --circle-transition: var(--switch-transition);
+            /* icon */
+            --icon-transition: all .2s cubic-bezier(0.27, 0.2, 0.25, 1.51);
+            --icon-cross-color: var(--switch-bg);
+            --icon-cross-size: 6px;
+            --icon-checkmark-color: var(--switch-checked-bg);
+            --icon-checkmark-size: 10px;
+            /* effect line */
+            --effect-width: calc(var(--circle-diameter) / 2);
+            --effect-height: calc(var(--effect-width) / 2 - 1px);
+            --effect-bg: var(--circle-bg);
+            --effect-border-radius: 1px;
+            --effect-transition: all .2s ease-in-out;
+        }
+        
+        .switch input {
+            display: none;
+        }
+        
+        .switch {
+            display: inline-block;
+        }
+        
+        .switch svg {
+            transition: var(--icon-transition);
+            position: absolute;
+            height: auto;
+        }
+        
+        .switch .checkmark {
+            width: var(--icon-checkmark-size);
+            color: var(--icon-checkmark-color);
+            transform: scale(0);
+        }
+        
+        .switch .cross {
+            width: var(--icon-cross-size);
+            color: var(--icon-cross-color);
+        }
+        
+        .slider {
+            box-sizing: border-box;
+            width: var(--switch-width);
+            height: var(--switch-height);
+            background: var(--switch-bg);
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            transition: var(--switch-transition);
+            cursor: pointer;
+        }
+        
+        .circle {
+            width: var(--circle-diameter);
+            height: var(--circle-diameter);
+            background: var(--circle-bg);
+            border-radius: inherit;
+            box-shadow: var(--circle-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--circle-transition);
+            z-index: 1;
+            position: absolute;
+            left: var(--switch-offset);
+        }
+        
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: var(--effect-width);
+            height: var(--effect-height);
+            left: calc(var(--switch-offset) + (var(--effect-width) / 2));
+            background: var(--effect-bg);
+            border-radius: var(--effect-border-radius);
+            transition: var(--effect-transition);
+        }
+        
+        /* actions */
+        .switch input:checked + .slider {
+            background: var(--switch-checked-bg);
+        }
+        
+        .switch input:checked + .slider .checkmark {
+            transform: scale(1);
+        }
+        
+        .switch input:checked + .slider .cross {
+            transform: scale(0);
+        }
+        
+        .switch input:checked + .slider::before {
+            left: calc(100% - var(--effect-width) - (var(--effect-width) / 2) - var(--switch-offset));
+        }
+        
+        .switch input:checked + .slider .circle {
+            left: calc(100% - var(--circle-diameter) - var(--switch-offset));
+            box-shadow: var(--circle-checked-shadow);
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 0 10px;
@@ -394,6 +530,15 @@
             h1 {
                 font-size: 1.8rem;
             }
+            
+            .form-group {
+                flex-wrap: wrap;
+            }
+            
+            .hint {
+                margin-left: 0;
+                margin-top: 10px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -403,8 +548,9 @@
     <div class="container">
         <header>
             <h1>🛠 ULTIMATE WHITELIST BYPASS 👨‍💻</h1>
-            <div class="version">✓ Версия: V1.6.5</div>
-            <div class="sub_version">Предпросмотр канала, новые подписки.</div>
+            <div class="version_type" id="version_type"></div>
+            <div class="version">✓ Версия: V2.0.0</div>
+            <div class="sub_version">Глобальное обновление.</div>
             <div class="credits-container">
                 <a href="https://t.me/s/ultimatewbypass" target="_blank" class="telegram-btn">
                     <i class="fab fa-telegram"></i>
@@ -414,69 +560,7 @@
         </header>
 
         <main>
-            <div class="panel">
-                <div class="panel-title">
-                    <i class="fas fa-cogs"></i> Настройки поиска
-                </div>
-
-                <div class="form-group">
-                    <label for="outputPath">Путь для сохранения конфигов</label>
-                    <input type="text" id="outputPath" placeholder="Оставьте пустым для сохранения в текущей папке">
-                    <div class="hint">Файл будет сохранён как "UWB_script_configs.txt" в указанной папке</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="keyword">Ключевое слово для фильтрации</label>
-                    <input type="text" id="keyword" placeholder="Оставьте пустым для получения всех конфигов">
-                    <div class="hint">Будут выбраны только конфиги, содержащие это ключевое слово (кроме гарантированных при выключенной фильтрации)</div>
-                </div>
-
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="noFilterGuaranteed" checked> Не фильтровать гарантированную подписку
-                    </label>
-                    <div class="hint info">✓ Гарантированные конфиги не фильтруются по ключевому слову и критериям</div>
-                    <div class="hint guaranteed-hint">⚠️ При выключенной фильтрации нерабочие гарантированные конфиги не сохраняются</div>
-                </div>
-
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="checkConfigs" checked> Проверять конфиги (DNS + WebSocket)
-                    </label>
-                    <div class="hint">Проверяет доступность серверов конфигов</div>
-                </div>
-
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="fastMode"> Быстрый режим (лимит конфигов)
-                    </label>
-                    <div class="hint">Ограничивает количество проверяемых конфигов для ускорения</div>
-                </div>
-
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="fastModeV2" checked> Быстрый режим V2 [BETA]
-                    </label>
-                    <div class="hint beta">⚡ Проверяет все конфиги одновременно (async)</div>
-                </div>
-
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="prioritizeGuaranteed" checked> Приоритет гарантированной подписки
-                    </label>
-                    <div class="hint">Сначала проверяет конфиги из нашего надежного источника</div>
-                </div>
-
-                <div class="buttons">
-                    <button id="startBtn">
-                        <i class="fas fa-play"></i> Начать поиск конфигов
-                    </button>
-                    <button id="resetBtn" class="secondary">
-                        <i class="fas fa-redo"></i> Сбросить
-                    </button>
-                </div>
-            </div>
-
+            <!-- Панель статуса и кнопок -->
             <div class="panel status-panel">
                 <div class="panel-title">
                     <i class="fas fa-info-circle"></i> Статус выполнения
@@ -488,8 +572,17 @@
                 <div class="status-progress">
                     <div class="progress-bar" id="progressBar"></div>
                 </div>
-            </div>
 
+                <div class="buttons">
+                    <button id="startBtn">
+                        <i class="fas fa-play"></i> Начать поиск конфигов
+                    </button>
+                    <button id="resetBtn" class="secondary">
+                        <i class="fas fa-redo"></i> Сбросить
+                    </button>
+                </div>
+            </div>
+            <!-- Панель результатов -->
             <div class="panel results-panel" id="resultsPanel">
                 <div class="results-header">
                     <div class="panel-title">
@@ -511,6 +604,128 @@
                     </button>
                 </div>
             </div>
+            <!-- Панель настроек (сворачиваемая) -->
+            <div class="panel collapsible collapsed" id="settingsPanel">
+                <div class="panel-title">
+                    <div>
+                        <i class="fas fa-cogs"></i> Настройки поиска
+                    </div>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+
+                <div class="panel-content">
+                    <div class="form-group">
+                        <label for="noFilterGuaranteed" style="margin-bottom: 0;">Не фильтровать гарантированную подписку</label>
+                        <label class="switch">
+                            <input type="checkbox" id="noFilterGuaranteed" checked>
+                            <div class="slider">
+                                <div class="circle">
+                                    <svg class="cross" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 365.696 365.696" y="0" x="0" height="6" width="6" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path data-original="#000000" fill="currentColor" d="M243.188 182.86 356.32 69.726c12.5-12.5 12.5-32.766 0-45.247L341.238 9.398c-12.504-12.503-32.77-12.503-45.25 0L182.86 122.528 69.727 9.374c-12.5-12.5-32.766-12.5-45.247 0L9.375 24.457c-12.5 12.504-12.5 32.77 0 45.25l113.152 113.152L9.398 295.99c-12.503 12.503-12.503 32.769 0 45.25L24.48 356.32c12.5 12.5 32.766 12.5 45.247 0l113.132-113.132L295.99 356.32c12.503 12.5 32.769 12.5 45.25 0l15.081-15.082c12.5-12.504 12.5-32.77 0-45.25zm0 0"></path>
+                                        </g>
+                                    </svg>
+                                    <svg class="checkmark" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 24 24" y="0" x="0" height="10" width="10" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path class="" data-original="#000000" fill="currentColor" d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="hint info">✓ Гарантированные конфиги не фильтруются по ключевому слову и критериям</div>
+                    <div class="hint guaranteed-hint">⚠️ При выключенной фильтрации нерабочие гарантированные конфиги не сохраняются</div>
+
+                    <div class="form-group">
+                        <label for="checkConfigs" style="margin-bottom: 0;">Проверять конфиги (DNS + WebSocket)</label>
+                        <label class="switch">
+                            <input type="checkbox" id="checkConfigs" checked>
+                            <div class="slider">
+                                <div class="circle">
+                                    <svg class="cross" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 365.696 365.696" y="0" x="0" height="6" width="6" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path data-original="#000000" fill="currentColor" d="M243.188 182.86 356.32 69.726c12.5-12.5 12.5-32.766 0-45.247L341.238 9.398c-12.504-12.503-32.77-12.503-45.25 0L182.86 122.528 69.727 9.374c-12.5-12.5-32.766-12.5-45.247 0L9.375 24.457c-12.5 12.504-12.5 32.77 0 45.25l113.152 113.152L9.398 295.99c-12.503 12.503-12.503 32.769 0 45.25L24.48 356.32c12.5 12.5 32.766 12.5 45.247 0l113.132-113.132L295.99 356.32c12.503 12.5 32.769 12.5 45.25 0l15.081-15.082c12.5-12.504 12.5-32.77 0-45.25zm0 0"></path>
+                                        </g>
+                                    </svg>
+                                    <svg class="checkmark" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 24 24" y="0" x="0" height="10" width="10" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path class="" data-original="#000000" fill="currentColor" d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="hint">Проверяет доступность серверов конфигов</div>
+
+                    <div class="form-group">
+                        <label for="fastMode" style="margin-bottom: 0;">Быстрый режим (лимит конфигов)</label>
+                        <label class="switch">
+                            <input type="checkbox" id="fastMode">
+                            <div class="slider">
+                                <div class="circle">
+                                    <svg class="cross" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 365.696 365.696" y="0" x="0" height="6" width="6" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path data-original="#000000" fill="currentColor" d="M243.188 182.86 356.32 69.726c12.5-12.5 12.5-32.766 0-45.247L341.238 9.398c-12.504-12.503-32.77-12.503-45.25 0L182.86 122.528 69.727 9.374c-12.5-12.5-32.766-12.5-45.247 0L9.375 24.457c-12.5 12.504-12.5 32.77 0 45.25l113.152 113.152L9.398 295.99c-12.503 12.503-12.503 32.769 0 45.25L24.48 356.32c12.5 12.5 32.766 12.5 45.247 0l113.132-113.132L295.99 356.32c12.503 12.5 32.769 12.5 45.25 0l15.081-15.082c12.5-12.504 12.5-32.77 0-45.25zm0 0"></path>
+                                        </g>
+                                    </svg>
+                                    <svg class="checkmark" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 24 24" y="0" x="0" height="10" width="10" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path class="" data-original="#000000" fill="currentColor" d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="hint">Ограничивает количество проверяемых конфигов для ускорения</div>
+
+                    <div class="form-group">
+                        <label for="fastModeV2" style="margin-bottom: 0;">Быстрый режим V2 [BETA]</label>
+                        <label class="switch">
+                            <input type="checkbox" id="fastModeV2" checked>
+                            <div class="slider">
+                                <div class="circle">
+                                    <svg class="cross" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 365.696 365.696" y="0" x="0" height="6" width="6" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path data-original="#000000" fill="currentColor" d="M243.188 182.86 356.32 69.726c12.5-12.5 12.5-32.766 0-45.247L341.238 9.398c-12.504-12.503-32.77-12.503-45.25 0L182.86 122.528 69.727 9.374c-12.5-12.5-32.766-12.5-45.247 0L9.375 24.457c-12.5 12.504-12.5 32.77 0 45.25l113.152 113.152L9.398 295.99c-12.503 12.503-12.503 32.769 0 45.25L24.48 356.32c12.5 12.5 32.766 12.5 45.247 0l113.132-113.132L295.99 356.32c12.503 12.5 32.769 12.5 45.25 0l15.081-15.082c12.5-12.504 12.5-32.77 0-45.25zm0 0"></path>
+                                        </g>
+                                    </svg>
+                                    <svg class="checkmark" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 24 24" y="0" x="0" height="10" width="10" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path class="" data-original="#000000" fill="currentColor" d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="hint beta">⚡ Проверяет все конфиги одновременно (async)</div>
+
+                    <div class="form-group">
+                        <label for="prioritizeGuaranteed" style="margin-bottom: 0;">Приоритет гарантированной подписки</label>
+                        <label class="switch">
+                            <input type="checkbox" id="prioritizeGuaranteed" checked>
+                            <div class="slider">
+                                <div class="circle">
+                                    <svg class="cross" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 365.696 365.696" y="0" x="0" height="6" width="6" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path data-original="#000000" fill="currentColor" d="M243.188 182.86 356.32 69.726c12.5-12.5 12.5-32.766 0-45.247L341.238 9.398c-12.504-12.503-32.77-12.503-45.25 0L182.86 122.528 69.727 9.374c-12.5-12.5-32.766-12.5-45.247 0L9.375 24.457c-12.5 12.504-12.5 32.77 0 45.25l113.152 113.152L9.398 295.99c-12.503 12.503-12.503 32.769 0 45.25L24.48 356.32c12.5 12.5 32.766 12.5 45.247 0l113.132-113.132L295.99 356.32c12.503 12.5 32.769 12.5 45.25 0l15.081-15.082c12.5-12.504 12.5-32.77 0-45.25zm0 0"></path>
+                                        </g>
+                                    </svg>
+                                    <svg class="checkmark" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 24 24" y="0" x="0" height="10" width="10" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path class="" data-original="#000000" fill="currentColor" d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="hint">Сначала проверяет конфиги из нашего надежного источника</div>
+                </div>
+            </div>
         </main>
 
         <footer>
@@ -521,6 +736,13 @@
             </p>
 
             <div style="margin-top: 20px; padding: 15px; background-color: #161b22; border-radius: 6px; border: 1px solid #30363d;">
+                <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+                    <a href="about:blank" target="_blank" class="telegram-btn" id="mirror_link">
+                        <i class="fas fa-copy" id="mirror_link_icon"></i>
+                        <span id="mirror_link_text"></span>
+                    </a>
+                </div>
+
                 <p style="font-size: 0.85rem; color: #8b949e; margin-bottom: 10px;">
                     <i class="fas fa-code-branch"></i> Авторы всех используемых подписок:
                 </p>
@@ -536,8 +758,19 @@
                     <p style="margin-left: 20px;">- vsevjik [@vsevj_134] (OBSpiskov)</p>
                     <p style="margin-left: 20px;">- @ByeWhiteLists (VK-cloud-love)</p>
                     <p style="margin-left: 20px;">- EtoNeYa [@YoutubeUnBlockRu] (EtoNeYa)</p>
-                    <p style="margin-left: 20px;">- vahe4xkwi [Нет ТГ] (cjdr)</p>
-                    <p style="margin-left: 20px;">- @catlergememe помогли с поиском подписок</p>
+                    <p style="margin-left: 20px;">- whoahaow [Нет ТГ] (bypass-unsecure)</p>
+                    <p style="margin-left: 20px;">- bywarm [Нет ТГ] (whitelists1-4pda)</p>
+                    <p style="margin-left: 20px;">- ? [Нет ТГ] (bypass-all)</p>
+                    <p style="margin-left: 20px;">- WL RUS [@wlrustg] (merged)</p>
+                    <p style="margin-left: 20px;">- CatlerGames [@catlergememe] (CaTWhiteVPN)</p>
+                    <p style="margin-left: 20px;">- DarkFirexs [Нет ТГ] (Whitelist VPN)</p>
+                    <p style="margin-left: 20px;">- ShatakVPN [Нет ТГ] (ConfigForge-V2Ray)</p>
+                    <p style="margin-left: 20px;">- FLEXIY0 [Нет ТГ] (matryoshka-vpn)</p>
+                    <p style="margin-left: 20px;">- GoodbyeWL [@GoodbyeWL] (GoodbyeWL)</p>
+                    <p style="margin-left: 20px;">- miladtahanian [Нет ТГ] (multi-proxy-config-fetcher)</p>
+                    <p style="margin-left: 20px;">- Kirillo4ka [Нет ТГ] (Vless-Rus-Mobile-White-List)</p>
+                    <p style="margin-left: 20px;">- vlesscollector [Нет ТГ] (vlesscollector)</p>
+                    <p style="margin-left: 20px;">- 55prosek-lgtm [Нет ТГ] (vpn_config_for_russia)</p>
                 </div>
             </div>
         </footer>
@@ -548,6 +781,15 @@
             // Construct the new URL while keeping the path and search parameters
             const newUrl = 'https://ryzgames31.github.io/UWB/' + window.location.pathname + window.location.search;
             window.location.replace(newUrl);
+        }
+        if (window.location.hostname === 'https://ryzgames31.github.io/UWB/') {
+            document.getElementById("version_type").innerText = "📌 Оригинал"
+            document.getElementById("mirror_link_text").innerText = "Зеркало"
+            document.getElementById("mirror_link").href = "https://uwb.gt.tc/"
+        } else {
+            document.getElementById("version_type").innerText = "📋 Зеркало"
+            document.getElementById("mirror_link_text").innerText = "Оригинал"
+            document.getElementById("mirror_link").href = "https://ryzgames31.github.io/UWB/"
         }
         // === КОНФИГУРАЦИЯ ИСТОЧНИКОВ ===
         const GUARANTEED_SUBSCRIPTION = "https://raw.githubusercontent.com/RYZgames31/UWB/refs/heads/main/wcfg";
@@ -561,7 +803,20 @@
             "https://raw.githubusercontent.com/zieng2/wl/main/vless_universal.txt",
             "https://raw.githubusercontent.com/vsevjik/OBSpiskov/refs/heads/main/wwh",
             "https://jsnegsukavsos.hb.ru-msk.vkcloud-storage.ru/love",
-            "https://raw.githubusercontent.com/EtoNeYaProject/etoneyaproject.github.io/refs/heads/main/whitelist"
+            "https://raw.githubusercontent.com/EtoNeYaProject/etoneyaproject.github.io/refs/heads/main/whitelist",
+            "https://raw.githubusercontent.com/whoahaow/rjsxrd/refs/heads/main/githubmirror/bypass-unsecure/bypass-unsecure-all.txt",
+            "https://raw.githubusercontent.com/bywarm/whitelists-vpns-etc/refs/heads/main/whitelists1-4pda.txt",
+            "http://fsub.flux.2bd.net/githubmirror/bypass/bypass-all.txt",
+            "https://bp.wl.free.nf/confs/merged.txt",
+            "https://raw.githubusercontent.com/twinkalex1470-crypto/CatWhiteVPN/refs/heads/main/CaTWhiteVPN.txt",
+            "https://raw.githubusercontent.com/DarkFirexs/Whitelist-bypass_VPN/refs/heads/main/Whitelist%20%7C%20VPN",
+            "https://raw.githubusercontent.com/ShatakVPN/ConfigForge-V2Ray/main/configs/all.txt",
+            "https://raw.githubusercontent.com/FLEXIY0/matryoshka-vpn/main/configs/russia_whitelist.txt",
+            "https://s3c3.001.gpucloud.ru/dixsm/htxml",
+            "https://raw.githubusercontent.com/miladtahanian/multi-proxy-config-fetcher/refs/heads/main/configs/proxy_configs.txt",
+            "https://raw.githubusercontent.com/Kirillo4ka/vpn-configs-for-russia/refs/heads/main/Vless-Rus-Mobile-White-List.txt",
+            "https://raw.githubusercontent.com/vlesscollector/vlesscollector/refs/heads/main/vless_configs.txt",
+            "https://raw.githubusercontent.com/55prosek-lgtm/vpn_config_for_russia/refs/heads/main/whitelist.txt"
         ];
         
         function getAllSubscriptions(prioritizeGuaranteed = true) {
@@ -576,8 +831,6 @@
         const resetBtn = document.getElementById('resetBtn');
         const downloadBtn = document.getElementById('downloadBtn');
         const copyAllBtn = document.getElementById('copyAllBtn');
-        const outputPathInput = document.getElementById('outputPath');
-        const keywordInput = document.getElementById('keyword');
         const noFilterGuaranteedCheckbox = document.getElementById('noFilterGuaranteed');
         const checkConfigsCheckbox = document.getElementById('checkConfigs');
         const fastModeCheckbox = document.getElementById('fastMode');
@@ -589,16 +842,40 @@
         const resultsPanel = document.getElementById('resultsPanel');
         const configsContainer = document.getElementById('configsContainer');
         const configCount = document.getElementById('configCount');
+        const settingsPanel = document.getElementById('settingsPanel');
         
         let foundConfigs = [];
         let totalConfigs = 0;
         let configsWithoutDuplicates = 0;
         let isProcessing = false;
         
+        // === ФУНКЦИИ ДЛЯ СВОРАЧИВАНИЯ ПАНЕЛИ ===
+        function toggleSettingsPanel() {
+            settingsPanel.classList.toggle('collapsed');
+            // Сохраняем состояние в localStorage
+            const isCollapsed = settingsPanel.classList.contains('collapsed');
+            localStorage.setItem('settingsPanelCollapsed', isCollapsed);
+        }
+        
+        // Инициализация состояния панели настроек
+        function initSettingsPanel() {
+            const savedState = localStorage.getItem('settingsPanelCollapsed');
+            // По умолчанию свернута, но если пользователь уже разворачивал - сохраняем его выбор
+            if (savedState === 'false') {
+                settingsPanel.classList.remove('collapsed');
+            } else {
+                // По умолчанию - свернуто
+                settingsPanel.classList.add('collapsed');
+            }
+            
+            // Добавляем обработчик клика на заголовок панели
+            settingsPanel.querySelector('.panel-title').addEventListener('click', toggleSettingsPanel);
+        }
+        
         // === ФУНКЦИИ ДЛЯ ГАРАНТИРОВАННЫХ КОНФИГОВ ===
         
         // Функция для загрузки конфигов из гарантированной подписки (с настройкой фильтрации)
-        async function fetchGuaranteedConfigs(keyword, noFilter = true) {
+        async function fetchGuaranteedConfigs(noFilter = true) {
             updateStatus('⭐ Загрузка гарантированных', noFilter ? 'Получение всех конфигов без фильтрации' : 'Фильтрация гарантированных конфигов', 10);
             
             try {
@@ -618,15 +895,7 @@
                 let configs = [];
                 for (const line of lines) {
                     if (line.trim()) {
-                        if (noFilter) {
-                            // Если отключена фильтрация - берем ВСЕ конфиги
-                            configs.push(line.trim());
-                        } else {
-                            // Если включена фильтрация - фильтруем как обычно
-                            if (isValidConfig(line, keyword)) {
-                                configs.push(line.trim());
-                            }
-                        }
+                        configs.push(line.trim());
                     }
                 }
                 
@@ -640,9 +909,10 @@
             }
         }
         
-        // Функция для получения конфигов из дополнительных источников (всегда с фильтрацией)
-        async function fetchConfigsFromAdditionalSource(url, keyword, sourceIndex, totalSources) {
+        // Функция для получения конфигов из дополнительных источников
+        async function fetchConfigsFromAdditionalSource(url, sourceIndex, totalSources) {
             try {
+                
                 const progress = 20 + Math.round((sourceIndex / totalSources) * 30);
                 updateStatus(
                     '⏳ Поиск в дополнительных источниках', 
@@ -670,7 +940,7 @@
                 for (const line of lines) {
                     if (count >= maxConfigs) break;
                     
-                    if (line.trim() && isValidConfig(line, keyword)) {
+                    if (line.trim()) {
                         sourceConfigs.push(line.trim());
                         count++;
                     }
@@ -698,45 +968,6 @@
             progressBar.style.width = `${progress}%`;
         }
         
-        // Функция для проверки конфига на соответствие критериям
-        function isValidConfig(config, keyword) {
-            const decodedConfig = decodeURLComponent(config);
-            
-            const hasRussianSites = 
-                config.includes('vk.com') || decodedConfig.includes('vk.com') ||
-                config.includes('userapi.com') || decodedConfig.includes('userapi.com') ||
-                config.includes('mail.ru') || decodedConfig.includes('mail.ru') ||
-                config.includes('yandex.net') || decodedConfig.includes('yandex.net') ||
-                config.includes('yastatic.net') || decodedConfig.includes('yastatic.net') ||
-                config.includes('yandex.ru') || decodedConfig.includes('yandex.ru') ||
-                config.includes('ok.ru') || decodedConfig.includes('ok.ru') ||
-                config.includes('ozone.ru') || decodedConfig.includes('ozone.ru') ||
-                config.includes('rutube.ru') || decodedConfig.includes('rutube.ru');
-            
-            const hasRussianIndicators = 
-                config.includes('%F0%9F%87%B7%F0%9F%87%BA') || 
-                decodedConfig.includes('🇷🇺') ||
-                config.includes('RU') || decodedConfig.includes('RU') ||
-                config.includes('Russia') || decodedConfig.includes('Russia') ||
-                config.includes('Россия') || decodedConfig.includes('Россия') ||
-                config.includes('Russian') || decodedConfig.includes('Russian');
-            
-            const hasExcludedTerms = 
-                decodedConfig.includes('Москва') ||
-                config.includes('#%5BSNI%3A') ||
-                decodedConfig.includes('confegraigan') ||
-                decodedConfig.includes('Global Connectivity Solutions Llp') ||
-                decodedConfig.includes('Yandex.Cloud LLC') ||
-                decodedConfig.includes('Hypercore Ltd') ||
-                decodedConfig.includes('Cloud Network LLC');
-            
-            const hasKeyword = keyword === '' || 
-                decodedConfig.toLowerCase().includes(keyword.toLowerCase()) ||
-                config.toLowerCase().includes(keyword.toLowerCase());
-            
-            return hasRussianSites && hasRussianIndicators && !hasExcludedTerms && hasKeyword;
-        }
-        
         function extractDomainAndPortFromConfig(config) {
             const match1 = config.match(/@([a-zA-Z0-9.-]+):(\d+)/);
             if (match1 && match1[1] && match1[2]) {
@@ -744,7 +975,7 @@
             }
             
             const match2 = config.match(/@([a-zA-Z0-9.-]+)(?:[?/#]|$)/);
-            if (match2 && match2[1]) {
+            if (match2 && match1[1]) {
                 return { domain: match2[1], port: 443 };
             }
             
@@ -989,7 +1220,6 @@
             startBtn.disabled = true;
             startBtn.innerHTML = '<div class="loading spinner"></div> Идет поиск...';
             
-            const keyword = keywordInput.value.trim();
             const noFilterGuaranteed = noFilterGuaranteedCheckbox.checked;
             const checkConfigs = checkConfigsCheckbox.checked;
             const fastMode = fastModeCheckbox.checked;
@@ -1010,16 +1240,14 @@
             
             // 1. Загружаем конфиги из гарантированной подписки (с учетом настройки фильтрации)
             updateStatus('⭐ Загрузка гарантированных', noFilterGuaranteed ? 'Без фильтрации' : 'С фильтрацией по ключевому слову', 10);
-            guaranteedConfigs = await fetchGuaranteedConfigs(keyword, noFilterGuaranteed);
+            // скоро обнова оффлайн режима. код тута будет.
+            guaranteedConfigs = await fetchGuaranteedConfigs(noFilterGuaranteed);
             allConfigs.push(...guaranteedConfigs);
-            
-            // 2. Загружаем конфиги из дополнительных источников (ВСЕГДА с фильтрацией)
             const additionalSources = ADDITIONAL_SUBSCRIPTIONS;
             
             for (let i = 0; i < additionalSources.length; i++) {
                 const sourceConfigs = await fetchConfigsFromAdditionalSource(
                     additionalSources[i], 
-                    keyword, 
                     i, 
                     additionalSources.length
                 );
@@ -1149,7 +1377,7 @@
             
             if (displayConfigs.length === 0) {
                 configCount.textContent = '0 конфигов';
-                configsContainer.innerHTML = '<div class="config-item">Конфиги не найдены. Попробуйте изменить ключевое слово.</div>';
+                configsContainer.innerHTML = '<div class="config-item">Конфиги не найдены.</div>';
             } else {
                 displayConfigs.forEach((healthInfo, index) => {
                     const configElement = document.createElement('div');
@@ -1314,20 +1542,7 @@
                 return;
             }
             
-            const outputPath = outputPathInput.value.trim();
-            let fileName = 'UWB_script_configs.txt';
-            if (outputPath) {
-                const pathParts = outputPath.split('/');
-                if (pathParts.length > 0) {
-                    const lastPart = pathParts[pathParts.length - 1];
-                    if (lastPart.includes('.txt')) {
-                        fileName = lastPart;
-                    } else {
-                        fileName = `${lastPart}/UWB_script_configs.txt`;
-                    }
-                }
-            }
-            
+            const fileName = 'UWB_script_configs.txt';
             const configText = originalConfigs.join('\n');
             const blob = new Blob([configText], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -1346,8 +1561,6 @@
         function resetForm() {
             if (isProcessing) return;
             
-            outputPathInput.value = '';
-            keywordInput.value = '';
             noFilterGuaranteedCheckbox.checked = true;
             fastModeCheckbox.checked = false;
             fastModeV2Checkbox.checked = true; // V2 включен по умолчанию
@@ -1389,9 +1602,17 @@
         });
         
         // Инициализация
-        fastModeV2Checkbox.checked = true; // V2 включен по умолчанию
-        fastModeCheckbox.checked = false; // Обычный быстрый режим выключен по умолчанию
-        updateStatus('Готов к поиску конфигов...', `Быстрый режим V2 включен, гарантированные конфиги не фильтруются`, 0);
+        function init() {
+            fastModeV2Checkbox.checked = true; // V2 включен по умолчанию
+            fastModeCheckbox.checked = false; // Обычный быстрый режим выключен по умолчанию
+            updateStatus('Готов к поиску конфигов...', `Быстрый режим V2 включен, гарантированные конфиги не фильтруются`, 0);
+            
+            // Инициализация сворачиваемой панели настроек
+            initSettingsPanel();
+        }
+        
+        // Запускаем инициализацию при загрузке страницы
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 
