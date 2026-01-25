@@ -5,27 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OneClick — UWB</title>
     <style>
-        html, body {
+        body {
             font-family: "Comfortaa", sans-serif;
             font-optical-sizing: auto;
             color: white;
+            background: #141414;
+            justify-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
         }
         .header-uwb {
             position: flex;
             top: 0;
             height: 20px;
-            background-color: black;
-            border: 5px solid white;
+            background: rgb(20, 20, 20);
+            border: 2px solid white;
             border-radius: 25px;
-            margin: auto;
+            margin: 1em;
             display: block;
-            padding-top: 10px;
+            text-align: center;
             padding: 10px;
+            box-shadow: 0px 0px 1em 1em black;
         }
         
-        .fa-mouse-pointer {
+        .content {
+            padding: 10%;
         }
-        
+       
         .header-uwb-title {
             font-weight: 800;
             font-style: normal;
@@ -33,31 +40,46 @@
         }
         
         .getkeybtn {
-            font-weight: 800;
+            font-weight: bold;
             font-style: normal;
-            width: 120px;
-            height: 60px;
-            margin: auto;
+            font-size: 1.5em;
+            width: fit-content;
+            height: 5em;
+            padding: 0.5em;
             display: block;
-            border: 0 solid;
-            border-radius: 25px;
-            background: white;
+            border: 2px solid;
+            border-radius: 1em;
+            box-shadow: 0px 0px 1em 0.5em black;
+            background: #141414;
+            color: white;
             margin-top: 10%;
             transition: 0.5s all;
         }
         
-        .getkeybtn:active {
-            background: lime;
+        .getkeybtn:hover {
+            background: white;
+            color: black;
         }
         
         .description {
-            font-optical-sizing: auto;
+            color: #ccc;
             font-weight: 800;
             font-style: normal;
-            margin: auto;
             display: block;
-            margin-top: 10%;
+            border: 1px black;
+            padding: 0.2em;
+            margin: 0.5em;
+            text-align: left;
         }
+        table th,td {
+            vertical-align: top;
+        }
+        table .description {
+            color: white;
+            /* text-align: right;
+            padding-right: 1em; */
+        }
+        /* * {border: 1px red solid !important} */
         
         
     </style>
@@ -68,13 +90,23 @@
 </head>
 
 <body bgcolor="black">
-    <div class="header-uwb">
-        <i class="fa-solid fa-mouse-pointer"></i><span class="header-uwb-title">OneClick V1.0 — UWB</span>
+    <header class="header-uwb">
+        <span class="header-uwb-title">— <pre style="display:inline"> </pre><i class="fa-solid fa-mouse-pointer"></i><pre style="display:inline"> </pre>OneClick V1.0 - UWB —</span>
+    </header>
+    <div class="content">
+        <table>
+            <tr>
+                <th>
+                    <span class="description"><i class="fa-solid fa-smile"></i> Проще некуда: Получение и копирование конфига одной кнопкой!</span>
+                    <span class="description"><i class="fa-solid fa-clock"></i> Последнее обновление: <br/>
+                    <span id="lastupdate"></span></span>
+                </th> <th>
+            <button class="getkeybtn" onclick="getcfg()">Получить конфиг</button>
+                </th>
+            </tr>
+        </table>
+        <span class="description" style="margin-top: 2em;"><i class="fa-solid fa-warning"></i> Конфиги могут быть нерабочими если обновление было более трёх дней назад.</span>
     </div>
-    <span class="description"><i class="fa-solid fa-smile"></i> Проще некуда: Получение и копирование конфига одной кнопкой!</span>
-    <button class="getkeybtn" onclick="getcfg()">Получить конфиг</button>
-    <span class="description"><i class="fa-solid fa-warning"></i> Конфиги могут быть нерабочими если обновление было более трёх дней назад.</span>
-    <span class="description"><i class="fa-solid fa-clock"></i> Последнее обновление: <span id="lastupdate"></span></span>
 
     <script>
         fetch("https://api.github.com/repos/RYZgames31/UWB/commits")
