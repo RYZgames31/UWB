@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneClick — UWB</title>
+    <style>
+        .header-uwb {
+            position: flex;
+            top: 0;
+            height: 20px;
+            background-color: black;
+            border: 5px solid white;
+            border-radius: 25px;
+            margin: auto;
+            display: block;
+            padding-top: 10px;
+            padding: 10px;
+        }
+        
+        .fa-mouse-pointer {
+            color: white;
+        }
+        
+        .header-uwb-title {
+            font-family: "Comfortaa", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 800;
+            font-style: normal;
+            color: white;
+            padding: 10px;
+        }
+        
+        .getkeybtn {
+            font-family: "Comfortaa", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 800;
+            font-style: normal;
+            width: 120px;
+            height: 60px;
+            margin: auto;
+            display: block;
+            border: 0 solid;
+            border-radius: 25px;
+            background: white;
+            margin-top: 10%;
+            transition: 0.5s all;
+        }
+        
+        .getkeybtn:active {
+            background: lime;
+        }
+        
+        .description {
+            font-family: "Comfortaa", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 800;
+            font-style: normal;
+            margin: auto;
+            display: block;
+            color: white;
+            margin-top: 10%;
+        }
+        
+        
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body bgcolor="black">
+    <div class="header-uwb">
+        <i class="fa-solid fa-mouse-pointer"></i><span class="header-uwb-title">OneClick V1.0 — UWB</span>
+    </div>
+    <span class="description"><i class="fa-solid fa-smile"></i> Проще некуда: Получение и копирование конфига одной кнопкой!</span>
+    <button class="getkeybtn" onclick="getcfg()">Получить конфиг</button>
+    <span class="description"><i class="fa-solid fa-warning"></i> Конфиги могут быть нерабочими если обновление было более трёх дней назад.</span>
+    <span class="description"><i class="fa-solid fa-clock"></i> Последнее обновление: <span id="lastupdate"></span></span>
+
+    <script>
+        fetch("https://api.github.com/repos/RYZgames31/UWB/commits")
+            .then(response => response.json())
+            .then(json => {
+                commitsJSON = json;
+                lastUpdated = commitsJSON[0]["commit"]["committer"]["date"];
+                lastUpdatedDate = new Date(lastUpdated);
+                document.getElementById('lastupdate').innerText = lastUpdatedDate.toLocaleString();
+            })
+        
+        function getcfg(){
+            fetch("https://raw.githubusercontent.com/RYZgames31/UWB/refs/heads/main/wcfg")
+                .then(response => response.text())
+                .then(text => {
+                    wcfg = text;
+                    wcfg = wcfg.split("\n");
+                    wcfg = wcfg[Math.floor(Math.random()*wcfg.length)];
+                    navigator.clipboard.writeText(wcfg);
+        
+                })
+        }
+    </script>
+</body>
